@@ -15,7 +15,11 @@ Cada escenario describe una situación concreta: qué pasa, qué percibe el sist
 | **Urgente** | Riesgo posible que requiere que alguien actúe hoy o ya (estafa, desconocido, síntoma) | Mensaje + llamada si no se lee |
 | **Emergencia** | Riesgo para la vida o la integridad (caída sin respuesta, ACV, SOS) | Llamada a la cadena de contactos hasta que alguien confirme; escalamiento a vecino o servicio de emergencia |
 
-**Cadena de contactos:** contacto principal → secundario → vecino/persona cercana. Configurable por familia. Una emergencia no se da por atendida hasta que **una persona confirma** que la tomó.
+**Canales:** app móvil de la familia (principal), WhatsApp (resumen y avisos con enlace a la app), llamada telefónica (emergencias, siempre).
+
+**Cadena de contactos:** contacto principal → secundario → vecino/persona cercana. Configurable por familia. En la app, quien toma la emergencia ("La tomo yo") detiene la cadena y el resto ve quién está atendiendo.
+
+**Central de monitoreo: opcional.** Si la casa ya tiene servicio de monitoreo, recibe también los eventos de cuidado y lo potenciamos. Si no lo tiene, todo funciona igual. Una emergencia no se da por atendida hasta que **una persona confirma** que la tomó.
 
 **Llamada directa a servicios de emergencia (107 / 911): opcional.** Lo recomendable es que la emergencia la maneje una persona a cargo, que conoce la situación y decide. La llamada directa se habilita para quien está realmente solo o no tiene a nadie que responda rápido, y entra en la cadena después de los contactos que no confirmaron (o en paralelo, si así se configura).
 

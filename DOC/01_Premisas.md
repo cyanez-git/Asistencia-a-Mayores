@@ -37,6 +37,8 @@ Nuestra solución se piensa **desde el mismo concepto que una buena persona de c
 
 ## 4. Información hacia la familia
 
+- La familia tiene una **app móvil** como canal principal; **WhatsApp** complementa para resúmenes y avisos; las **emergencias siempre llegan por llamada telefónica**.
+- Si la casa ya tiene **alarma o central de monitoreo**, se integra y se potencia. No es obligatoria.
 - Por defecto, la familia recibe **alertas y resúmenes**.
 - **Transcripciones, audio o video son opcionales:** se habilitan porque la familia lo pide o porque **la situación lo requiere** (p. ej., una estafa en curso: la familia tiene que poder ver qué pasó y actuar).
 

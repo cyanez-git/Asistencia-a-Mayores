@@ -63,19 +63,44 @@ Los requisitos dicen **qué** tiene que lograr el sistema, no con qué hardware 
 
 ### 1.4 Avisos y familia (AVI)
 
+| Canal | Para qué |
+|---|---|
+| **App** | Canal principal de la familia: avisos, detalle, coordinación, configuración, cámaras |
+| **WhatsApp** | Resumen diario y avisos con enlace a la app; para quien no la instala |
+| **Llamada telefónica** | Emergencias, siempre, independiente de internet |
+| **Central de monitoreo** | Opcional, si la casa ya la tiene |
+
+
 | ID | Requisito | Crit. | Escenarios |
 |---|---|---|---|
 | AVI-01 | Clasificar todo aviso en cuatro niveles: Resumen, Atención, Urgente, Emergencia. | C | Todos |
-| AVI-02 | Canal principal con la familia: WhatsApp (sin instalar otra app para recibir avisos). | E | Todos |
-| AVI-03 | **Emergencia:** llamar a la cadena de contactos en orden hasta que **una persona confirme** que la tomó. Si nadie confirma, seguir escalando. | C | A1–A6, B3 |
+| AVI-02 | Canales con la familia: **app móvil** como canal principal (ver 1.5), **WhatsApp** para resumen y avisos con enlace a la app (llega también a quien no instala la app), **llamada telefónica** para emergencias. | E | Todos |
+| AVI-03 | **Emergencia:** llamar por teléfono a la cadena de contactos en orden hasta que **una persona confirme** que la tomó (en la llamada o en la app). Si nadie confirma, seguir escalando. La llamada sale del canal celular de la casa, independiente de internet y de las notificaciones de la app. | C | A1–A6, B3 |
 | AVI-04 | **Urgente:** mensaje inmediato + llamada si no se lee en un tiempo configurable. | E | B1, B2, D2, D3 |
 | AVI-05 | El mensaje de emergencia se arma con una **plantilla fija** con los datos (qué, dónde, cuándo, últimas señales), sin depender de un modelo de IA para redactarlo. | C | A1–A6 |
 | AVI-06 | Resumen diario configurable: cómo estuvo, de qué habló, cómo se la notó, visitas, cumplimiento de recordatorios. | E | C1, D1 |
 | AVI-07 | Acceso **opcional** de la familia a transcripciones, audio, imagen o video: por configuración, o habilitado automáticamente cuando la situación lo requiere (p. ej., estafa, desconocido, caída). | E | D2, D3, A1 |
 | AVI-08 | Llamada directa a servicios de emergencia (107 / 911): **opcional**, configurable como último eslabón de la cadena o en paralelo. | E | A1–A6 |
-| AVI-09 | Configurar contactos, orden de la cadena, horarios, umbrales y nivel de detalle desde un lugar simple para la familia. | E | Todos |
+| AVI-09 | Configurar contactos, orden de la cadena, horarios, umbrales y nivel de detalle desde la app. | E | Todos |
+| AVI-10 | **Central de monitoreo: opcional.** Si la casa ya tiene servicio de monitoreo, el sistema le envía los eventos de cuidado (caída, falta de respuesta, SOS, inactividad) en formato estándar (SIA DC-09 / Contact ID). Sin monitoreo, todo funciona igual con la cadena de contactos. | E | A1–A6, D2–D4 |
+| AVI-11 | Los avisos por WhatsApp no incluyen contenido sensible (video, audio, transcripciones): solo el resumen y un enlace a la app. | E | Todos |
 
-### 1.5 Funcionamiento del sistema (SIS)
+### 1.5 App móvil de la familia (APP)
+
+| ID | Requisito | Crit. | Escenarios |
+|---|---|---|---|
+| APP-01 | Recibir avisos con notificaciones; las de **Emergencia** suenan aunque el teléfono esté en silencio o en "No molestar" (alertas críticas en iOS, pantalla completa en Android). Son un canal adicional: la llamada telefónica (AVI-03) sigue siendo obligatoria. | C | A1–A6 |
+| APP-02 | **Coordinación familiar en emergencias:** "La tomo yo" detiene la cadena y todos ven quién está atendiendo, qué hizo y cuándo se resolvió. | C | A1–A6 |
+| APP-03 | Ver el detalle de cada aviso: qué pasó, señales, imagen o video del momento, transcripción cuando corresponda. | E | A1, D2, D3 |
+| APP-04 | Ver cámaras en vivo, según los permisos configurados. | E | A1, D2, D4 |
+| APP-05 | Línea de tiempo del día y tendencias de semanas: actividad, ánimo, pulso, temperatura, sueño, visitas, recordatorios cumplidos. | E | B5, C1, C5 |
+| APP-06 | Cargar recordatorios, mensajes y temas para el asistente. | E | C2, C3 |
+| APP-07 | Configurar contactos, cadena, umbrales, nivel de detalle, privacidad, intensidad de iniciativa del asistente y llamada directa al 107/911. | E | Todos |
+| APP-08 | Ver el estado del sistema: dispositivos conectados, batería, energía, internet, áreas sin cobertura. | E | E1, E2 |
+| APP-09 | Videollamada con la persona mayor (si hay pantalla en la casa). | E | C3 |
+| APP-10 | Varios familiares con roles y permisos distintos (p. ej., quién ve video, quién configura). | E | Todos |
+
+### 1.6 Funcionamiento del sistema (SIS)
 
 | ID | Requisito | Crit. | Escenarios |
 |---|---|---|---|
@@ -97,6 +122,7 @@ Los requisitos dicen **qué** tiene que lograr el sistema, no con qué hardware 
 | CONF-03 | Hay un **canal de aviso alternativo** independiente de la conexión a internet de la casa (p. ej., red celular). | C |
 | CONF-04 | Una falla en la parte de conversación (IA, nube) no afecta la detección ni los avisos de emergencia. | C |
 | CONF-05 | El sistema se autoverifica en forma periódica (dispositivos, canales de aviso) y avisa si algo no funciona. | C |
+| CONF-06 | **Dos caminos independientes de aviso:** si el hub falla, los botones de pánico y sensores críticos siguen avisando por un equipo independiente (la central de alarma, con su propia batería y comunicador). | C |
 
 ### 2.2 Calidad de detección (DET)
 
@@ -154,6 +180,7 @@ Esto es lo que tiene que **percibir** el sistema. Es la entrada para el paso de 
 | **Contexto de medios** | Donde haya TV o radio | Saber qué contenido se está reproduciendo (por audio o integración con la TV) | VOZ-12 |
 | **Salida de audio de calidad y pantalla** | Ambientes donde escucha música o mira tele | Música, radio, videos; mostrar contenido en la TV existente o en una pantalla propia | VOZ-13, VOZ-14 |
 | **Sensores del hogar** | Cocina, puertas, baño | Hornalla, agua, puerta abierta, temperatura ambiente | INT-09 |
+| **Central de alarma** con sensores, batería y comunicador propios | Un lugar fijo | Sensores de puertas, agua, humo, gas, pánico; segundo camino de aviso; monitoreo opcional; cuidado de la casa cuando no hay nadie | CONF-06, AVI-10, SEG-05 |
 | **Hub local** con respaldo de energía y canal celular | Un lugar fijo | Procesamiento local, camino de emergencia, avisos | CONF-01..05 |
 
 ---
