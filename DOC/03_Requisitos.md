@@ -101,7 +101,18 @@ Los requisitos dicen **qué** tiene que lograr el sistema, no con qué hardware 
 | APP-09 | Videollamada con la persona mayor (si hay pantalla en la casa). | E | C3 |
 | APP-10 | Varios familiares con roles y permisos distintos (p. ej., quién ve video, quién configura). | E | Todos |
 
-### 1.6 Funcionamiento del sistema (SIS)
+### 1.6 Función de alarma (ALA)
+
+| ID | Requisito | Crit. | Escenarios |
+|---|---|---|---|
+| ALA-01 | Modos de alarma: **ausente** (casa vacía), **presente/noche** (protege puertas y ventanas con la persona dentro) y **desarmado**. | E | D5 |
+| ALA-02 | Armado y desarmado por app, por voz con clave, por llavero y, de forma configurable, automático al detectar que la casa quedó vacía. Recordatorio por voz al volver antes de que suene. | E | D5 |
+| ALA-03 | Detección de intrusión con los sensores propios (puertas, radares, cámaras), con verificación por dos fuentes antes de disparar. | E | D4, D5 |
+| ALA-04 | Sirena interior y exterior. | E | D5 |
+| ALA-05 | Envío de eventos a central de monitoreo (opcional) en formato estándar **SIA DC-09 / Contact ID**, incluidos los eventos de cuidado (caída, SOS, inactividad). | E | D5, A1–A6 |
+| ALA-06 | **Puente genérico opcional** para una alarma existente de cualquier marca: lee sus salidas PGM (disparo, armado, falla, corte de luz) y puede disparar una zona 24 h (médica o pánico) de esa central. Conexión eléctrica, sin depender del protocolo de la marca. | E | A1–A6, E1 |
+
+### 1.7 Funcionamiento del sistema (SIS)
 
 | ID | Requisito | Crit. | Escenarios |
 |---|---|---|---|
@@ -123,7 +134,7 @@ Los requisitos dicen **qué** tiene que lograr el sistema, no con qué hardware 
 | CONF-03 | Hay un **canal de aviso alternativo** independiente de la conexión a internet de la casa (p. ej., red celular). | C |
 | CONF-04 | Una falla en la parte de conversación (IA, nube) no afecta la detección ni los avisos de emergencia. | C |
 | CONF-05 | El sistema se autoverifica en forma periódica (dispositivos, canales de aviso) y avisa si algo no funciona. | C |
-| CONF-06 | **Segundo camino de aviso:** si la casa tiene alarma, sus botones de pánico y sensores críticos siguen avisando por su propio comunicador aunque el hub falle. Sin alarma, la falla del hub se detecta por autoverificación remota (CONF-05) y se avisa a la familia. | C |
+| CONF-06 | **Segundo camino de aviso:** si la casa tiene una alarma existente conectada por el puente (ALA-06), sus botones de pánico y sensores siguen avisando por su propio comunicador aunque el hub falle. En todos los casos, la falla del hub se detecta por autoverificación remota (CONF-05) y se avisa a la familia. | C |
 
 ### 2.2 Calidad de detección (DET)
 
@@ -181,7 +192,8 @@ Esto es lo que tiene que **percibir** el sistema. Es la entrada para el paso de 
 | **Contexto de medios** | Donde haya TV o radio | Saber qué contenido se está reproduciendo (por audio o integración con la TV) | VOZ-12 |
 | **Salida de audio de calidad y pantalla** | Ambientes donde escucha música o mira tele | Música, radio, videos; mostrar contenido en la TV existente o en una pantalla propia | VOZ-13, VOZ-14 |
 | **Sensores del hogar** | Cocina, puertas, baño | Hornalla, agua, puerta abierta, temperatura ambiente | INT-09 |
-| **Alarma existente** (complemento, si la casa la tiene) | Un lugar fijo | Sensores adicionales, segundo camino de aviso, monitoreo si lo tiene | CONF-06, AVI-10 |
+| **Sirena** interior y exterior | Interior y frente de la casa | Función de alarma | ALA-04 |
+| **Puente genérico** (opcional) | Junto a la central de la alarma existente | Leer salidas PGM y disparar una zona 24 h de cualquier alarma | ALA-06, CONF-06 |
 | **Hub local** con respaldo de energía y canal celular | Un lugar fijo | Procesamiento local, camino de emergencia, avisos | CONF-01..05 |
 
 ---

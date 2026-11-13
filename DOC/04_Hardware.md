@@ -35,14 +35,14 @@ El precio **no** es criterio en esta etapa.
 └──┬────────────┬────────────┬─────────────┬────────────┬─────────┬───┘
    │ WiFi       │ PoE        │ WiFi        │ Zigbee     │ WiFi    │ (opcional)
    ▼            ▼            ▼             ▼            ▼         ▼
-Satélites    Cámaras     Radares de    Sensores del  Reloj     Alarma
-de voz       (ambientes  caída (baño,  hogar +       de la     existente
-(todos los   comunes)    dormitorio)   botones SOS   persona   (complemento)
-ambientes)               OBLIGATORIOS                + TV
+Satélites    Cámaras     Radares de    Sensores del  Reloj     Puente a
+de voz       (ambientes  caída (baño,  hogar +       de la     alarma
+(todos los   comunes)    dormitorio)   botones SOS + persona   existente
+ambientes)               OBLIGATORIOS  sirenas       + TV      (opcional)
 ```
 
-**Sensores propios = base.** Radares, cámaras, satélites, reloj y Zigbee son lo que hace funcionar el sistema.
-**Alarma = complemento opcional.** Si la casa ya la tiene, se aprovechan sus sensores, su comunicador como segundo camino de aviso y su monitoreo si lo tiene.
+**El sistema es también la alarma.** Con sus sensores, sirenas, batería y comunicador, cumple la función de alarma (modos ausente / presente-noche) sin depender de terceros.
+**Alarma existente = opcional.** Si la casa ya tiene una, se suma con un **puente genérico** que funciona con cualquier marca (sección 4).
 
 ---
 
@@ -57,6 +57,9 @@ ambientes)               OBLIGATORIOS                + TV
 | **Cámaras** | Reolink domo PoE de interior | Hikvision domo PoE |
 | **Radar baño/dormitorio** | Aqara FP2 | Seeed MR60FDA2 (radar de caídas con ESPHome) |
 | **Zigbee** | Coordinador SMLIGHT SLZB-06 + sensores y botones Aqara | Línea Sonoff |
+| **Sirena interior** | Sirena Zigbee Heiman HS2WD-E | Sirena Zigbee de otro fabricante |
+| **Sirena exterior** | Sirena exterior 12 V convencional, comandada por la placa del puente (relé) | — |
+| **Puente a alarma existente** (opcional) | Placa ESP32 KinCony KC868-A4 (4 relés + 4 entradas optoaisladas, ESPHome) | Placa ESP32 con relés + módulo de entradas optoaisladas |
 | **TV** | Google TV Streamer en la tele existente | Pantalla propia (tablet) |
 | **Reloj** | Samsung Galaxy Watch5 o posterior + app propia (ver sección 5) | — |
 
@@ -92,35 +95,24 @@ ambientes)               OBLIGATORIOS                + TV
 
 ---
 
-## 4. Alarma existente (complemento)
+## 4. Puente genérico a una alarma existente (opcional)
 
-Si la casa tiene alarma, puede aportar:
-- **Sensores adicionales** (puertas, movimiento, humo).
-- **Segundo camino de aviso** (CONF-06): su batería y comunicador siguen funcionando si el hub falla.
-- **Central de monitoreo**, si la tiene (AVI-10).
+Para la casa que ya tiene alarma y quiere conservarla (ALA-06). Funciona con **cualquier marca** porque usa una conexión **eléctrica** con dos cosas que tienen casi todas las centrales, no el protocolo del fabricante:
 
-**Formas de integrarla**, de la más a la menos deseable:
-1. La central reporta eventos en **SIA DC-09 o Contact ID por IP** a nuestro hub, como si fuera una central de monitoreo.
-2. **Salidas programables (PGM)** de la central conectadas a entradas del hub: se reciben estados (alarma, pánico, sabotaje).
-3. Nuestro hub **dispara una zona** de la alarma con un relé: así una caída confirmada puede salir también por el comunicador y el monitoreo de la alarma.
+1. **Salidas PGM de la central → entradas del puente.** Se programan en la central para informar: disparo de alarma, armada/desarmada, falla y **corte de luz**. Cualquier zona de la central (p. ej., un botón de pánico) puede dirigirse a una PGM.
+2. **Relé del puente → una zona 24 h de la central** (tipo "médica" o "pánico"). Una caída confirmada por nuestro sistema dispara también la alarma existente y sale por su comunicador y su monitoreo. Es el **segundo camino de aviso** (CONF-06).
 
-### Caso de estudio: Tausend CR600 (con WiFi, sin módulo celular ni monitoreo)
+**Instalación:** la hace el técnico de alarmas de la casa, en las borneras de la central. Se programa qué evento sale por cada PGM y qué zona queda como médica/pánico.
 
-Fuentes: manual CR600 v00.01.27 (2026) y "Comandos por IP" de Tausend.
+**Equipo:** placa ESP32 KinCony KC868-A4 (sección 3), con ESPHome. La misma placa comanda la sirena exterior.
 
-**Vías de integración, de la más a la menos concreta:**
+### Banco de pruebas: Tausend CR600
 
-1. **Salidas PGM → hub (sin protocolo).** 2 salidas en placa (8 con expansor), colector abierto a negativo. Funciones útiles (sección [005]): 01 alarma, 02 armada/desarmada, 05 falla, 21 falla de comunicador, 22 **corte de 220V**. Cualquier zona puede dirigirse a una PGM (atributos 6/7, secciones [023]–[030]). Lectura con un ESP32 + ESPHome.
-2. **Hub → zona de la central (sin protocolo).** Un relé del hub sobre una zona tipo **10 "Médica 24h"** o **12 "Pánico 24h"**: una caída confirmada dispara también la alarma y su notificación. Es el segundo camino de aviso (CONF-06).
-3. **Comandos por IP (documentados por Tausend).** Texto plano por TCP. Relevantes para nosotros:
-   - `STSZ` zonas abiertas en este momento (actividad de los sensores aun desarmada), `STSA` estado (READY, ARM, STAY, AWAY…), `STSF` fallas (AC, BAT, COMU…), `STSM` memorias de alarma.
-   - `FUNM` evento médico, `FUNP` pánico, `PGMn:1` activar salida.
-   - Solo responde a consultas: no envía eventos por su cuenta, hay que consultar periódicamente.
-   - **Probado (2026-11-13):** conectada al WiFi de la casa, la central no tiene ningún puerto TCP abierto (escaneo 1–10000). Los comandos por IP **solo funcionan en modo Access Point**, que es temporal y de configuración. **No sirven como integración permanente** salvo que Tausend habilite el acceso local en la red de la casa (consulta pendiente al fabricante).
-   - ⚠ Seguridad: `PRG` lee y escribe la configuración (incluido el código maestro) sin pedir clave. Si el puerto queda abierto en la red de la casa, cualquiera en esa red podría usarlo.
-4. **Controles remotos Tausend en modo "Médica exclusivo"** (sección [174], opción 5) como botón SOS adicional.
+Se usa la alarma Tausend CR600 de la casa de prueba (con WiFi, sin módulo celular ni monitoreo) para validar el puente. Según su manual (v00.01.27):
+- PGM útiles (sección [005]): 01 alarma, 02 armada/desarmada, 05 falla, 22 corte de 220 V. Zonas dirigibles a PGM con los atributos 6/7 (secciones [023]–[030]). Salidas de colector abierto a negativo.
+- Zonas 24 h para el disparo: tipo 10 "Médica 24h" o tipo 12 "Pánico 24h".
 
-**Descartadas:** reporte a monitoreo por IP (solo formatos Avatec, Bykom/SoftGuard y Tausend IP, sin especificación pública); app Tausend (pasa por su servidor en la nube); comandos por SMS (requieren módulo celular).
+**Integración por protocolo, probada y descartada (2026-11-13):** los "Comandos por IP" de Tausend solo responden en modo Access Point (configuración temporal); conectada al WiFi de la casa no expone ningún puerto. El reporte por IP usa formatos sin especificación pública (Avatec, Bykom/SoftGuard, Tausend IP). Esto confirma que el puente eléctrico es el camino genérico.
 
 ---
 
@@ -150,7 +142,7 @@ Fuentes: manual CR600 v00.01.27 (2026) y "Comandos por IP" de Tausend.
 
 | Paso | Qué | Fecha propuesta |
 |---|---|---|
-| 1 | Relevamiento de la alarma Tausend → **hecho** (sección 4). Comandos por IP probados: no responden en la red de la casa. Vías confirmadas: PGM y disparo de zona | hasta 2026-11-20 |
+| 1 | Relevamiento de la alarma Tausend → **hecho** (sección 4). Queda como banco de pruebas del puente genérico | hasta 2026-11-20 |
 | 2 | ~~Análisis de opciones de reloj~~ → **Decidido:** Galaxy Watch5 o posterior | 2026-11-13 |
 | 3 | Compra de 1 unidad de cada equipo de la sección 3 | hasta 2026-11-27 |
 | 4 | Banco de pruebas en una casa real | 2026-11-27 a 2026-12-04 |

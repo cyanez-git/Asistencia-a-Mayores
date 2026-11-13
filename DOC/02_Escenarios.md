@@ -197,6 +197,12 @@ Los falsos positivos son el mayor riesgo para que el sistema se abandone: si la 
 - **Situación:** alguien entra de noche o cuando la persona no está en casa.
 - **Avisa:** **Urgente** o **Emergencia** según el contexto, con imagen.
 
+### D5. Casa sola: alarma armada
+- **Situación:** la persona sale (al médico, de compras, a lo de un familiar) y la casa queda vacía.
+- **Hace:** se arma en modo ausente: por la app, por voz con una clave, con un llavero, o en forma automática cuando el sistema detecta que la persona salió y no hay nadie (configurable). Al volver, se desarma por los mismos medios; si la persona se olvida, el asistente se lo recuerda por voz antes de que suene.
+- **Ante una intrusión:** sirena, imagen del ingreso y aviso **Urgente** a la familia (y a la central de monitoreo, si la hay). La doble verificación (dos sensores o sensor + imagen) reduce las falsas alarmas.
+- **De noche:** modo presente/noche: protege puertas y ventanas mientras la persona duerme, sin que sus movimientos dentro de la casa disparen la alarma.
+
 ---
 
 ## E. Situaciones del entorno y del sistema

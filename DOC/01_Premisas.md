@@ -34,11 +34,12 @@ Nuestra solución se piensa **desde el mismo concepto que una buena persona de c
 7. **No hay precio de referencia.** El costo no limita el diseño en esta etapa.
 8. **El único límite de alcance: nada fuera de la casa.**
 9. **La emergencia no depende de que todo funcione.** Si una situación grave se detecta, el aviso tiene que salir aunque falle internet, la luz o el modelo de IA.
+10. **La solución incluye la función de alarma.** Con sus propios sensores, sirena y comunicador, el sistema también cuida la casa cuando la persona no está (intrusión), sin depender de ninguna alarma de terceros. Si la casa ya tiene una alarma, se puede sumar de forma **opcional** mediante un puente genérico que funciona con cualquier marca.
 
 ## 4. Información hacia la familia
 
 - La familia tiene una **app móvil** como canal principal; **WhatsApp** complementa para resúmenes y avisos; las **emergencias siempre llegan por llamada telefónica**.
-- Si la casa ya tiene **alarma o central de monitoreo**, se integra y se potencia. No es obligatoria.
+- Si la casa contrata o ya tiene **central de monitoreo**, el sistema le envía los eventos en formato estándar. No es obligatoria.
 - Por defecto, la familia recibe **alertas y resúmenes**.
 - **Transcripciones, audio o video son opcionales:** se habilitan porque la familia lo pide o porque **la situación lo requiere** (p. ej., una estafa en curso: la familia tiene que poder ver qué pasó y actuar).
 
