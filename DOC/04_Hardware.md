@@ -81,6 +81,8 @@ ambientes)               OBLIGATORIOS  sirenas       + TV      (opcional)
 
 **Cámara, etapa 1: Seisa IP 1080p (disponible).** Firmware Xiongmai (chip XM530), probada en la red de la casa: responde por **RTSP** (puerto 554) y **ONVIF 2.41** (puerto 8899). Sirve para integrar la cámara al sistema (vista en vivo, imagen en los avisos). ⚠ Este tipo de firmware suele conectarse a servidores externos (puerto 34567 abierto, nube XMEye): bloquearle la salida a internet en el router. ⚠ Cambiar la clave de fábrica.
 
+**Cámara, etapa 1: Imou IPC-K6C (disponible).** Marca hogareña de Dahua, interior, WiFi. Verificado: da video local por **RTSP** (puerto 554, ruta `/cam/realmonitor?channel=1&subtype=0`, usuario `admin`, clave = Safety Code de la etiqueta) sin pasar por la nube de Imou; responde a descubrimiento **ONVIF**.
+
 **Cámaras, etapa 2: Reolink domo PoE.** RTSP local simple, buena visión nocturna, funciona bien con Frigate.
 - ⚠ Detección de persona en el piso, de día y de noche.
 - ⚠ Reconocimiento facial en la entrada.
