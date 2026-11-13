@@ -79,7 +79,9 @@ ambientes)               OBLIGATORIOS  sirenas       + TV      (opcional)
 - ⚠ Su parlante es chico: para música (VOZ-13) puede hacer falta un parlante aparte.
 - La latencia de la conversación (VOZ-05) depende sobre todo del software y del servicio de IA.
 
-**Cámaras: Reolink domo PoE.** RTSP local simple, buena visión nocturna, funciona bien con Frigate.
+**Cámara, etapa 1: Seisa IP 1080p (disponible).** Firmware Xiongmai (chip XM530), probada en la red de la casa: responde por **RTSP** (puerto 554) y **ONVIF 2.41** (puerto 8899). Sirve para integrar la cámara al sistema (vista en vivo, imagen en los avisos). ⚠ Este tipo de firmware suele conectarse a servidores externos (puerto 34567 abierto, nube XMEye): bloquearle la salida a internet en el router. ⚠ Cambiar la clave de fábrica.
+
+**Cámaras, etapa 2: Reolink domo PoE.** RTSP local simple, buena visión nocturna, funciona bien con Frigate.
 - ⚠ Detección de persona en el piso, de día y de noche.
 - ⚠ Reconocimiento facial en la entrada.
 
