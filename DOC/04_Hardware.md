@@ -64,7 +64,9 @@ ambientes)               OBLIGATORIOS  sirenas       + TV      (opcional)
 
 ### Por qué cada uno y qué validar
 
-**Hub: Mini PC con GPU NVIDIA.** Es lo que más software corre sin adaptación: Home Assistant, Frigate (visión), Whisper (voz), modelos locales.
+**Hub, etapa 1: mini PC Bangho Cubic A4130** (Intel Core i3-4010U, 8 GB RAM, SSD 120 GB), disponible y dedicada al proyecto. Corre Home Assistant OS, ESPHome, Zigbee, recepción de datos del reloj y reglas de emergencia. **No** corre IA local (transcripción de voz, análisis de video): durante el desarrollo se usan servicios en la nube y las cámaras quedan para la etapa 2.
+
+**Hub, etapa 2: Mini PC con GPU NVIDIA.** Es lo que más software corre sin adaptación: Home Assistant, Frigate (visión), Whisper (voz), modelos locales.
 - ⚠ Medir consumo real para dimensionar la UPS.
 
 **Energía y canal celular.**
