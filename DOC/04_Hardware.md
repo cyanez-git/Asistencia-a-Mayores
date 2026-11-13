@@ -116,7 +116,7 @@ Fuentes: manual CR600 v00.01.27 (2026) y "Comandos por IP" de Tausend.
    - `STSZ` zonas abiertas en este momento (actividad de los sensores aun desarmada), `STSA` estado (READY, ARM, STAY, AWAY…), `STSF` fallas (AC, BAT, COMU…), `STSM` memorias de alarma.
    - `FUNM` evento médico, `FUNP` pánico, `PGMn:1` activar salida.
    - Solo responde a consultas: no envía eventos por su cuenta, hay que consultar periódicamente.
-   - ⚠ **Crítico:** el documento describe el uso en **modo Access Point** (red propia de la central, 192.168.4.1:8002), que es un modo temporal de configuración. Validar si el puerto TCP también responde cuando la central está conectada al WiFi de la casa.
+   - **Probado (2026-11-13):** conectada al WiFi de la casa, la central no tiene ningún puerto TCP abierto (escaneo 1–10000). Los comandos por IP **solo funcionan en modo Access Point**, que es temporal y de configuración. **No sirven como integración permanente** salvo que Tausend habilite el acceso local en la red de la casa (consulta pendiente al fabricante).
    - ⚠ Seguridad: `PRG` lee y escribe la configuración (incluido el código maestro) sin pedir clave. Si el puerto queda abierto en la red de la casa, cualquiera en esa red podría usarlo.
 4. **Controles remotos Tausend en modo "Médica exclusivo"** (sección [174], opción 5) como botón SOS adicional.
 
@@ -150,7 +150,7 @@ Fuentes: manual CR600 v00.01.27 (2026) y "Comandos por IP" de Tausend.
 
 | Paso | Qué | Fecha propuesta |
 |---|---|---|
-| 1 | Relevamiento de la alarma Tausend → **hecho** (sección 4). Pendiente: probar si los comandos por IP responden en la red de la casa | hasta 2026-11-20 |
+| 1 | Relevamiento de la alarma Tausend → **hecho** (sección 4). Comandos por IP probados: no responden en la red de la casa. Vías confirmadas: PGM y disparo de zona | hasta 2026-11-20 |
 | 2 | ~~Análisis de opciones de reloj~~ → **Decidido:** Galaxy Watch5 o posterior | 2026-11-13 |
 | 3 | Compra de 1 unidad de cada equipo de la sección 3 | hasta 2026-11-27 |
 | 4 | Banco de pruebas en una casa real | 2026-11-27 a 2026-12-04 |
