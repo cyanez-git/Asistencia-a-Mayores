@@ -30,6 +30,7 @@ Los requisitos dicen **qué** tiene que lograr el sistema, no con qué hardware 
 | VOZ-12 | Reconocer qué está viendo o escuchando la persona (TV, radio: noticiero, chimentos, películas, deportes, música) y comentarlo en el momento oportuno, sin interrumpir de forma inoportuna. | E | C3c |
 | VOZ-13 | Reproducir música y radio por pedido de voz, con control por voz (volumen, pausa, siguiente), y aprender sus gustos. | E | C3d |
 | VOZ-14 | Mostrar videos o contenido (p. ej., YouTube) en la tele o en una pantalla por pedido de voz. | E | C3d |
+| VOZ-15 | Ante desconfianza ("¿me estás vigilando?"), responder con mensajes tranquilizadores **y verdaderos**, validar lo que siente la persona y reforzar la confianza con hechos. Nunca negar algo que el sistema hace. Informar a la familia si la desconfianza es sostenida o aparece de golpe. | E | C3e |
 
 ### 1.2 Interpretación en segundo plano (INT)
 
@@ -122,7 +123,7 @@ Los requisitos dicen **qué** tiene que lograr el sistema, no con qué hardware 
 | CONF-03 | Hay un **canal de aviso alternativo** independiente de la conexión a internet de la casa (p. ej., red celular). | C |
 | CONF-04 | Una falla en la parte de conversación (IA, nube) no afecta la detección ni los avisos de emergencia. | C |
 | CONF-05 | El sistema se autoverifica en forma periódica (dispositivos, canales de aviso) y avisa si algo no funciona. | C |
-| CONF-06 | **Dos caminos independientes de aviso:** si el hub falla, los botones de pánico y sensores críticos siguen avisando por un equipo independiente (la central de alarma, con su propia batería y comunicador). | C |
+| CONF-06 | **Segundo camino de aviso:** si la casa tiene alarma, sus botones de pánico y sensores críticos siguen avisando por su propio comunicador aunque el hub falle. Sin alarma, la falla del hub se detecta por autoverificación remota (CONF-05) y se avisa a la familia. | C |
 
 ### 2.2 Calidad de detección (DET)
 
@@ -175,12 +176,12 @@ Esto es lo que tiene que **percibir** el sistema. Es la entrada para el paso de 
 |---|---|---|---|
 | **Oídos y voz** (micrófono + parlante) | Cada ambiente con cobertura, incluido baño y dormitorio | Conversación, pedido de ayuda, verificación de caídas, análisis del habla, conversaciones con terceros | VOZ-01..07, INT-02..08, SEG-02, SEG-05 |
 | **Ojos** (cámara) | Ambientes comunes y entrada | Caídas, postura, reconocimiento de personas, visitas, ingresos | SEG-01, SEG-10, INT-06 |
-| **Sensor sin imagen** | Baño, dormitorio | Presencia, caída, inmovilidad, tiempo en el ambiente | SEG-01, SEG-06 |
+| **Sensor sin imagen** (radar, **obligatorio**) | Baño, dormitorio | Presencia, caída, inmovilidad, tiempo en el ambiente | SEG-01, SEG-06 |
 | **Wearable** | En la persona | Pulso continuo, impacto/caída, temperatura, botón de ayuda | SEG-03, SEG-05, SEG-07, SEG-08 |
 | **Contexto de medios** | Donde haya TV o radio | Saber qué contenido se está reproduciendo (por audio o integración con la TV) | VOZ-12 |
 | **Salida de audio de calidad y pantalla** | Ambientes donde escucha música o mira tele | Música, radio, videos; mostrar contenido en la TV existente o en una pantalla propia | VOZ-13, VOZ-14 |
 | **Sensores del hogar** | Cocina, puertas, baño | Hornalla, agua, puerta abierta, temperatura ambiente | INT-09 |
-| **Central de alarma** con sensores, batería y comunicador propios | Un lugar fijo | Sensores de puertas, agua, humo, gas, pánico; segundo camino de aviso; monitoreo opcional; cuidado de la casa cuando no hay nadie | CONF-06, AVI-10, SEG-05 |
+| **Alarma existente** (complemento, si la casa la tiene) | Un lugar fijo | Sensores adicionales, segundo camino de aviso, monitoreo si lo tiene | CONF-06, AVI-10 |
 | **Hub local** con respaldo de energía y canal celular | Un lugar fijo | Procesamiento local, camino de emergencia, avisos | CONF-01..05 |
 
 ---

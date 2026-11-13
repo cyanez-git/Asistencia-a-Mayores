@@ -1,199 +1,138 @@
-# Hardware: candidatos por función
-**Fecha:** 2026-11-13 (rev. con la alarma como base)
+# Hardware
+**Fecha:** 2026-11-13 (rev. 3)
 **Base:** [03_Requisitos.md](03_Requisitos.md), sección 3 (capacidades de percepción)
 
-Regla de trabajo: **máximo 2 candidatos por función**, se compra **1 unidad** de cada uno, se prueba y se decide en fecha. Nada se compra en cantidad hasta que la prueba lo valide.
+**Criterio de esta revisión:** empezar por **un equipo por función, el más concreto que va a funcionar bien**. Se compra 1 unidad, se prueba y se decide. El segundo candidato solo aparece si el primero no pasa la prueba.
 
-Los ítems marcados **⚠ validar** son supuestos que la prueba tiene que confirmar antes de decidir.
-
----
-
-## 1. Premisa: la alarma como base
-
-Gran parte del hardware que necesitamos ya existe, probado y homologado, en un **sistema de alarma**: batería de respaldo, comunicador celular con llamadas de voz, botones de pánico, sensores de puertas, agua, humo y gas, cámaras, y una red de instaladores en todo el país.
-
-Por eso la instalación se piensa como **alarma + cuidado**:
-
-- **La central de alarma** aporta sensores del hogar, botones de pánico, sirena, su propia batería y comunicador, y un **segundo camino de aviso** independiente del hub (CONF-06).
-- **Nuestro hub** es el cerebro: recibe los eventos de la alarma, suma voz, cámaras, radares y reloj, cruza las señales y decide.
-- **Si la casa ya tiene alarma** compatible, se integra. **Si tiene central de monitoreo**, se le envían también los eventos de cuidado (AVI-10). Ambas cosas son opcionales.
-- Como beneficio adicional, la casa queda protegida cuando la persona no está.
-
-**Lo que la alarma no cubre y sigue siendo nuestro:** asistente de voz, análisis en segundo plano, reloj (pulso, temperatura, caídas), radares de caídas en ambientes privados, y la lógica que cruza todo.
+Los ítems marcados **⚠ validar** son supuestos que la prueba tiene que confirmar.
 
 ---
 
-## 2. Criterios (salen de los requisitos)
+## 1. Criterios
 
 | Criterio | Por qué | Requisito |
 |---|---|---|
 | Los datos llegan al hub **sin pasar por la nube del fabricante** | El camino de emergencia funciona sin internet | CONF-01 |
-| **API oficial o protocolo estándar** (SIA DC-09, Contact ID, RTSP/ONVIF, ESPHome, Zigbee, SDK oficial) | Integrar sin ingeniería inversa y poder cambiar de fabricante | ESC-03 |
-| **Central de alarma:** salida de eventos **SIA DC-09** hacia nuestro hub y/o **API local oficial** | Recibir sus sensores sin depender de su nube; no repetir el error de la ingeniería inversa | CONF-01, CONF-06 |
-| **Prueba real con 1 unidad** antes de comprar más | Validar en el uso, no en la ficha técnica | — |
+| **API oficial o protocolo estándar** (RTSP/ONVIF, ESPHome, Zigbee, SDK oficial, SIA/Contact ID) | Integrar sin ingeniería inversa y poder cambiar de fabricante | ESC-03 |
+| **Producto concreto, probado y disponible**, antes que kits o desarrollos a medida | Avanzar con lo que funciona | — |
 | Disponible en Argentina / homologación ENACOM | **No excluye para el piloto.** Sí es requisito para el producto | — |
 
 El precio **no** es criterio en esta etapa.
 
 ---
 
-## 3. Vista general de la instalación
+## 2. Vista general
 
 ```
-            ┌───────────────────── Internet ─────────────────────┐
-            │  (conversación IA, app de la familia, WhatsApp)    │
-            └────────────┬──────────────────────────┬────────────┘
-                         │                          │
-┌────────────────────────┴──────────────┐   ┌───────┴─────────────────────┐
-│ HUB LOCAL (en UPS)                    │   │ CENTRAL DE ALARMA           │
-│ detección de caídas · visión · voz    │◄──┤ batería propia · 4G con voz │
-│ reglas de emergencia · integraciones  │SIA│ sirena · monitoreo opcional │
-│ módem celular con voz/SMS             │   └───────┬─────────────────────┘
-└──┬─────────────┬───────────┬──────────┘           │ radio propia
-   │ WiFi        │ PoE       │ WiFi / ESPHome       ▼
-   ▼             ▼           ▼                 Sensores de la alarma:
-Satélites     Cámaras     Radares de caída     puertas, agua, humo, gas,
-de voz        (ambientes  (baño, dormitorio)   botones de pánico,
-(todos los    comunes)    + reloj de la        movimiento
-ambientes)                persona
-                          + TV / pantalla
+              ┌──────────────────── Internet ───────────────────┐
+              │ (conversación IA, app de la familia, WhatsApp)  │
+              └───────────────────────┬─────────────────────────┘
+                                      │  + canal celular de respaldo
+┌─────────────────────────────────────┴───────────────────────────────┐
+│ HUB LOCAL (en UPS)                                                  │
+│ detección de caídas · visión · voz local · reglas de emergencia     │
+│ coordinador Zigbee · módem celular con voz/SMS                      │
+└──┬────────────┬────────────┬─────────────┬────────────┬─────────┬───┘
+   │ WiFi       │ PoE        │ WiFi        │ Zigbee     │ WiFi    │ (opcional)
+   ▼            ▼            ▼             ▼            ▼         ▼
+Satélites    Cámaras     Radares de    Sensores del  Reloj     Alarma
+de voz       (ambientes  caída (baño,  hogar +       de la     existente
+(todos los   comunes)    dormitorio)   botones SOS   persona   (complemento)
+ambientes)               OBLIGATORIOS                + TV
 ```
 
-**Dos caminos de aviso independientes:**
-1. **Hub** → llamadas con mensaje detallado, app, WhatsApp, monitoreo.
-2. **Central de alarma** → si el hub falla, los botones de pánico y sensores críticos siguen avisando por su propio comunicador.
+**Sensores propios = base.** Radares, cámaras, satélites, reloj y Zigbee son lo que hace funcionar el sistema.
+**Alarma = complemento opcional.** Si la casa ya la tiene, se aprovechan sus sensores, su comunicador como segundo camino de aviso y su monitoreo si lo tiene.
 
 ---
 
-## 4. Candidatos por función
+## 3. Equipo elegido por función
 
-### 4.1 Central de alarma
-
-| | Candidato A | Candidato B |
+| Función | Equipo | Si no pasa la prueba |
 |---|---|---|
-| **Equipo** | Ajax Hub 2 (4G) o Hub 2 Plus | Hikvision AX PRO |
-| **A favor** | Envía eventos en **SIA DC-09** a cualquier receptor (nuestro hub puede ser uno); muy buena línea de sensores inalámbricos (incluye botón de pánico, agua, humo, puertas); batería y comunicador celular; difundida | API local (ISAPI); integra cámaras Hikvision (videoverificación) en el mismo ecosistema; muy difundida en Argentina |
-| **En contra** | Radio propietaria: sus sensores solo funcionan con su central (aceptable si los eventos salen por SIA) | ⚠ validar alcance y estabilidad de la API local |
+| **Hub local** | Mini PC x86 con GPU NVIDIA dedicada (clase RTX 4060/5060, 8–16 GB VRAM) | NVIDIA Jetson Orin |
+| **Energía** | Estación de energía LiFePO4 con función UPS (~1 kWh) | UPS online con baterías externas |
+| **Canal celular** | Router 4G con failover (Teltonika RUT241) + módem LTE con voz (SIMCom SIM7600) | VoIP sobre la red celular |
+| **Oídos y voz** | Home Assistant Voice Preview Edition | FutureProofHomes Satellite1 |
+| **Cámaras** | Reolink domo PoE de interior | Hikvision domo PoE |
+| **Radar baño/dormitorio** | Aqara FP2 | Seeed MR60FDA2 (radar de caídas con ESPHome) |
+| **Zigbee** | Coordinador SMLIGHT SLZB-06 + sensores y botones Aqara | Línea Sonoff |
+| **TV** | Google TV Streamer en la tele existente | Pantalla propia (tablet) |
+| **Reloj** | **En análisis** (ver sección 5) | — |
 
-**⚠ Validar en ambos (crítico):**
-- **¿Qué eventos salen con la alarma desarmada?** Las alarmas están pensadas para cuando no hay nadie. Con la persona en casa (alarma desarmada), necesitamos igual los eventos de botones de pánico, agua, humo, gas y, si es posible, puertas.
-- **Sensores de movimiento como sensores de actividad:** muchos detectores de alarma se "duermen" unos minutos después de detectar y no reportan desarmados. Si no sirven para medir actividad, esa función la cubren cámaras y radares.
-- Latencia desde el evento hasta que llega al hub.
-- Cómo nuestro hub dispara un evento en la central (p. ej., una caída confirmada que debe ir al monitoreo) si se usa el comunicador de la alarma.
+### Por qué cada uno y qué validar
 
-**Casa con alarma existente:** si es una marca con SIA DC-09 o API local, se integra. Si no, se evalúa caso por caso.
+**Hub: Mini PC con GPU NVIDIA.** Es lo que más software corre sin adaptación: Home Assistant, Frigate (visión), Whisper (voz), modelos locales.
+- ⚠ Medir consumo real para dimensionar la UPS.
 
-### 4.2 Hub local (cerebro de la casa)
+**Energía y canal celular.**
+- Llamadas de voz con chip argentino: resuelto (los comunicadores de alarma ya lo hacen).
+- Cámaras por PoE desde un switch en la UPS: siguen funcionando sin luz.
+- ⚠ Modo degradado: satélites y radares en enchufes comunes se apagan sin luz. Validar si hace falta respaldo para los de baño y dormitorio.
 
-Necesita correr en la casa: detección de personas y caídas en video, reconocimiento facial y de voz, transcripción, reglas de emergencia, receptor SIA e integraciones. Eso pide **aceleración por GPU**.
+**Oídos y voz: Home Assistant Voice PE.** Producto oficial, abierto y local, el más difundido para esto.
+- ⚠ Captación de voz baja a 3–4 m y con la tele prendida.
+- ⚠ Su parlante es chico: para música (VOZ-13) puede hacer falta un parlante aparte.
+- La latencia de la conversación (VOZ-05) depende sobre todo del software y del servicio de IA.
 
-| | Candidato A | Candidato B |
-|---|---|---|
-| **Equipo** | Mini PC x86 con GPU NVIDIA dedicada (clase RTX 4060/5060, 8–16 GB VRAM) | NVIDIA Jetson Orin (AGX Orin 64 GB u Orin NX 16 GB) |
-| **A favor** | Máxima compatibilidad de software (Home Assistant, Frigate, Whisper, modelos locales); fácil de conseguir y reemplazar | Bajo consumo (más autonomía con UPS); diseñado para visión en el borde |
-| **En contra** | Consumo alto (50–150 W): pesa en la autonomía sin luz | Ecosistema ARM más acotado; algunos modelos requieren adaptación |
+**Cámaras: Reolink domo PoE.** RTSP local simple, buena visión nocturna, funciona bien con Frigate.
+- ⚠ Detección de persona en el piso, de día y de noche.
+- ⚠ Reconocimiento facial en la entrada.
 
-**Recomendación inicial:** A, por flexibilidad mientras definimos el software. Medir consumo real para dimensionar la UPS.
+**Radar: Aqara FP2.** Producto terminado, con zonas y detección de caídas, montaje en techo. **Obligatorio en baño y dormitorio.**
+- ⚠ **Crítico:** que la detección de caídas llegue al hub **sin la nube de Aqara**. Si no, se pasa al Seeed MR60FDA2.
+- ⚠ Caídas simuladas, persona en la cama vs. en el piso, vapor de ducha, falsos positivos durante 2 semanas.
 
-### 4.3 Energía y comunicación del hub
+**Zigbee: SLZB-06 + Aqara.** Botones SOS (baño, al lado de la cama), puertas, pérdida de agua, temperatura y humedad, detector de gas.
+- ⚠ Botón del baño: resistencia a salpicaduras.
+- ⚠ "Hornalla sin nadie": combinar gas/temperatura de la cocina con presencia.
 
-La alarma tiene su propia batería y comunicador. El hub necesita los suyos para que el camino principal (con mensajes detallados) también funcione sin luz ni internet.
-
-| Función | Candidato A | Candidato B |
-|---|---|---|
-| **Energía** (CONF-02: 8 h) | Estación de energía LiFePO4 con función UPS (~1 kWh; p. ej., EcoFlow o Bluetti) | UPS online con baterías externas |
-| **Canal celular** (CONF-03) | Router 4G con failover (p. ej., Teltonika RUT241) + módem LTE con voz (p. ej., SIMCom SIM7600) | Router 4G con failover + llamadas por VoIP sobre la red celular |
-
-Notas:
-- **Llamadas de voz con chip argentino:** resuelto. Los comunicadores de alarma ya lo hacen (llamada, mensaje grabado, confirmación con tecla).
-- Cámaras por **PoE** desde un switch en la UPS: siguen funcionando sin luz.
-- Satélites de voz y radares en enchufes comunes se apagan sin luz. **Modo degradado:** sin luz, la detección se sostiene con el reloj, los sensores de la alarma (a batería) y las cámaras PoE. ⚠ validar si alcanza o si hace falta respaldo para algunos satélites (baño, dormitorio).
-
-### 4.4 Oídos y voz (satélites por ambiente)
-
-| | Candidato A | Candidato B |
-|---|---|---|
-| **Equipo** | Home Assistant Voice Preview Edition | FutureProofHomes Satellite1 |
-| **A favor** | Abierto (ESPHome), integración nativa, local | Mejor arreglo de micrófonos y amplificador para parlante externo (sirve también para música) |
-| **En contra** | Parlante chico: no sirve para música; captación a distancia ⚠ validar | Menos difundido; ⚠ validar disponibilidad |
-
-**Qué medir:** captación de voz baja a 3–4 m y con la tele prendida; latencia total de la conversación (VOZ-05, depende sobre todo del software); calidad para música (VOZ-13); funcionamiento en el baño.
-
-### 4.5 Ojos (cámaras)
-
-Cámaras con **RTSP/ONVIF**, alimentadas por **PoE**, con procesamiento en el hub (p. ej., Frigate).
-
-| | Candidato A | Candidato B |
-|---|---|---|
-| **Equipo** | Hikvision de interior, PoE (línea domo) | Reolink de interior, PoE |
-| **A favor** | Muy difundidas en Argentina, ONVIF completo; **mismo ecosistema que la alarma Hikvision** (videoverificación para el monitoreo) | RTSP local simple, buena visión nocturna |
-| **En contra** | Configuración más técnica | Fuera del ecosistema de la alarma |
-
-**Qué medir:** detección de persona en el piso de día y de noche; cobertura de un ambiente con 1 cámara; reconocimiento facial de visitas en la entrada.
-
-### 4.6 Sensor sin imagen (baño y dormitorio)
-
-Tiene que detectar **caída e inmovilidad**, no solo presencia. Tecnología: **radar mmWave**. Las alarmas no ofrecen esto.
-
-| | Candidato A | Candidato B |
-|---|---|---|
-| **Equipo** | Aqara FP2 | Seeed Studio MR60FDA2 (radar 60 GHz de caídas, kit con ESP32 y ESPHome) |
-| **A favor** | Producto terminado, zonas configurables, detección de caídas, montaje en techo | Abierto y local por diseño (ESPHome), específico para caídas |
-| **En contra** | ⚠ validar que la detección de caídas llegue al hub **sin la nube de Aqara** | Más "kit" que producto: carcasa y montaje a resolver |
-
-**Qué medir:** caídas simuladas en baño y al lado de la cama; acostada en la cama vs. en el piso; falsos positivos durante 2 semanas; vapor de ducha.
-
-### 4.7 Reloj de la persona (wearable)
-
-| | Candidato A | Candidato B |
-|---|---|---|
-| **Equipo** | Samsung Galaxy Watch (Wear OS) con **app propia** usando el SDK oficial de sensores de Samsung | Bangle.js 2 (firmware abierto) |
-| **A favor** | Pulso continuo, **temperatura de piel**, acelerómetro, 5 ATM, se vende oficialmente en Argentina; envía datos por WiFi directo al hub | Totalmente abierto; batería de semanas |
-| **En contra** | Batería de 1–2 días (USO-02 pide 5) ⚠ validar acceso al SDK para nuestra app | Sin temperatura de piel; pulso menos preciso; no apto para ducha prolongada; importación |
-
-**Batería del candidato A:** propuesta de **dos relojes en rotación**, uno cargando mientras se usa el otro, con el cambio integrado a una rutina diaria que el asistente recuerda.
-
-**Qué medir:** detección de caídas en el reloj; precisión del pulso; temperatura; envío al hub sin la nube de Samsung; consumo real; uso nocturno.
-
-### 4.8 Sensores del hogar y botones de pánico
-
-**Vienen de la alarma** (4.1): puertas, pérdida de agua, humo, gas y botones de pánico (baño, al lado de la cama), todos de la línea de la central elegida.
-
-**Complemento Zigbee solo si hace falta** algo que la línea de la alarma no tenga o no reporte desarmada (p. ej., temperatura y humedad por ambiente). En ese caso: coordinador SMLIGHT SLZB-06 o Sonoff ZBDongle-E, y sensores Aqara o Sonoff.
-
-Notas:
-- "Hornalla prendida sin nadie" sale de **combinar** el detector de gas o temperatura de la cocina con la presencia (cámara o radar). ⚠ validar con la cocina real.
-- Botón del baño: ⚠ validar resistencia a salpicaduras.
-
-### 4.9 TV, pantalla y contexto de medios
-
-| | Candidato A | Candidato B |
-|---|---|---|
-| **Equipo** | Google TV Streamer en la tele que ya tiene la persona | Pantalla propia (tablet de 11–13" en soporte) con nuestra app |
-| **A favor** | Usa la tele de siempre; YouTube y apps nativas; se controla desde el hub; el hub sabe qué se está reproduciendo | **Videollamadas con la familia** (APP-09), fotos y mensajes; independiente de la tele |
-| **En contra** | No sirve para videollamadas | Una pantalla más en la casa |
-
-Pueden convivir. Propuesta: probar A primero y evaluar B como complemento.
-
-**Contexto de medios (VOZ-12):** sin hardware nuevo. Los satélites escuchan la tele o la radio, el hub transcribe e identifica el contenido, y con Google TV además sabe qué está activo.
-
-**Música (VOZ-13):** por el satélite con parlante adecuado (candidato B de 4.4) o un parlante con integración local.
+**TV: Google TV Streamer.** Usa la tele que la persona ya conoce; YouTube y apps nativas; el hub sabe qué se está reproduciendo (VOZ-12).
+- La pantalla propia para videollamadas (APP-09) queda para después.
 
 ---
 
-## 5. Plan de pruebas y fechas
+## 4. Alarma existente (complemento)
+
+Si la casa tiene alarma, puede aportar:
+- **Sensores adicionales** (puertas, movimiento, humo).
+- **Segundo camino de aviso** (CONF-06): su batería y comunicador siguen funcionando si el hub falla.
+- **Central de monitoreo**, si la tiene (AVI-10).
+
+**Formas de integrarla**, de la más a la menos deseable:
+1. La central reporta eventos en **SIA DC-09 o Contact ID por IP** a nuestro hub, como si fuera una central de monitoreo.
+2. **Salidas programables (PGM)** de la central conectadas a entradas del hub: se reciben estados (alarma, pánico, sabotaje).
+3. Nuestro hub **dispara una zona** de la alarma con un relé: así una caída confirmada puede salir también por el comunicador y el monitoreo de la alarma.
+
+**Caso de estudio: alarma Tausend (sin monitoreo) de tu casa.** Para entender qué nos puede brindar, necesitamos:
+- Modelo de la central (está en la placa o en el manual).
+- Qué comunicador tiene: línea telefónica, GSM/4G, WiFi o IP.
+- Si tiene salidas PGM.
+- Si se puede configurar para reportar a un receptor propio (Contact ID o SIA, por IP o línea).
+- Qué app usa y qué muestra.
+- Qué sensores tiene instalados.
+
+---
+
+## 5. Reloj: en análisis
+
+Es el dispositivo más exigente: pulso continuo, caídas, temperatura, botón de ayuda, ducha, comodidad, batería y datos directo al hub. Queda **fuera de la primera compra** hasta analizar mejor las opciones.
+
+Opciones vistas hasta ahora:
+- **Samsung Galaxy Watch con app propia:** sensores completos (incluida temperatura de piel), pero batería de 1–2 días. Se planteó usar **dos relojes en rotación**; queda como alternativa a evaluar.
+- **Bangle.js 2:** abierto y con semanas de batería, pero sensores más limitados.
+
+**Próximo paso:** un análisis más amplio de opciones (relojes, pulseras, colgantes, anillos) contra los requisitos SEG-03, SEG-05, SEG-07, SEG-08 y USO-02.
+
+---
+
+## 6. Plan de pruebas y fechas
 
 | Paso | Qué | Fecha propuesta |
 |---|---|---|
-| 1 | Compra de 1 unidad de cada candidato (o del recomendado, si se acuerda), incluida la central de alarma con un kit mínimo de sensores (puerta, agua, pánico) | hasta 2026-11-27 |
-| 2 | Banco de pruebas en una casa real: alarma + hub + 1 satélite + 1 cámara + 1 radar + reloj | 2026-11-27 a 2026-12-04 |
-| 3 | Prueba de 2 semanas con las mediciones de cada sección | 2026-12-04 a 2026-12-18 |
-| 4 | **Decisión por función** y registro en este documento | 2026-12-18 |
-
----
-
-## 6. Decisiones pendientes
-
-1. ¿Compramos **los dos candidatos** de cada función o solo el recomendado y el segundo si el primero falla?
-2. ¿En qué **casa real** hacemos el banco de pruebas? ¿Alguna de las casas de los casos ya tiene alarma (y de qué marca)?
-3. ¿Estás de acuerdo con la propuesta de **dos relojes en rotación**?
+| 1 | Relevamiento de la alarma Tausend | hasta 2026-11-20 |
+| 2 | Análisis de opciones de reloj y decisión de qué probar | hasta 2026-11-20 |
+| 3 | Compra de 1 unidad de cada equipo de la sección 3 | hasta 2026-11-27 |
+| 4 | Banco de pruebas en una casa real | 2026-11-27 a 2026-12-04 |
+| 5 | Prueba de 2 semanas | 2026-12-04 a 2026-12-18 |
+| 6 | Decisión por función y registro en este documento | 2026-12-18 |

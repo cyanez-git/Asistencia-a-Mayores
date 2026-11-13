@@ -154,6 +154,16 @@ Los falsos positivos son el mayor riesgo para que el sistema se abandone: si la 
 - **Hace:** reproduce la música o la radio en el parlante, y el video en la tele o en una pantalla. Controla volumen, pausa, siguiente, por voz.
 - **Además:** puede proponer música según el momento y el ánimo, y aprende sus gustos.
 
+### C3e. Desconfianza hacia el asistente
+- **Situación:** la persona pregunta "¿Me estás vigilando?", "¿Quién te escucha?", "¿Le contás todo a mi hija?", o se muestra molesta o incómoda con el sistema.
+- **Hace:**
+  - Responde con calma y **con la verdad**, en palabras simples: está para acompañarla y cuidarla, como alguien de confianza; no le cuenta a la familia lo que conversan, solo avisa si pasa algo que pueda ponerla en riesgo.
+  - Valida lo que siente ("Es lógico que te lo preguntes") sin discutir ni insistir.
+  - Refuerza la confianza con hechos: le recuerda veces en que fue útil, le explica qué ve y qué no (p. ej., que en el baño no hay cámara).
+  - Nunca niega algo que el sistema hace. Si la confianza se basa en una mentira y la persona la descubre, se pierde para siempre.
+- **Avisa:** queda en el **Resumen**. **Atención** si la desconfianza es sostenida, va en aumento o aparece de golpe sin motivo: puede ser una señal de cambio de ánimo o cognitivo que la familia tiene que conocer.
+- **Objetivo:** que la persona sienta al asistente como un aliado, no como un control.
+
 ### C4. Cambio brusco de ánimo
 - **Percibe:** tono de voz, temas, frases ("no tengo ganas de nada", "para qué seguir"), menos interés en conversar, comparado con su forma habitual.
 - **Hace:** la acompaña con empatía, sin interrogarla.
