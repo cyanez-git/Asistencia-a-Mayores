@@ -121,8 +121,6 @@ Es el dispositivo más exigente: pulso continuo, caídas, temperatura, botón de
 Opciones vistas hasta ahora:
 - **Samsung Galaxy Watch con app propia:** sensores completos (incluida temperatura de piel), pero batería de 1–2 días. Se planteó usar **dos relojes en rotación**; queda como alternativa a evaluar.
 - **Bangle.js 2:** abierto y con semanas de batería, pero sensores más limitados.
-- **ZSWatch** (github.com/ZSWatch/ZSWatch): reloj abierto (nRF5340, Zephyr, GPL-3.0). Hoy solo existe como kit de desarrollo (WatchDK); el reloj final está en desarrollo, el pulso depende de una placa de extensión aún en desarrollo, solo tiene BLE, no tiene sensor de temperatura ni datos de resistencia al agua o batería. **No sirve para el piloto.** Interesante a largo plazo si se busca un reloj propio; ojo con GPL-3.0 (las modificaciones al firmware distribuidas deben publicarse).
-
 **Próximo paso:** un análisis más amplio de opciones (relojes, pulseras, colgantes, anillos) contra los requisitos SEG-03, SEG-05, SEG-07, SEG-08 y USO-02.
 
 ---
