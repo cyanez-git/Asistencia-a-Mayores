@@ -58,7 +58,7 @@ ambientes)               OBLIGATORIOS  sirenas       + TV      (opcional)
 | **Radar baño/dormitorio** | Aqara FP2 | Seeed MR60FDA2 (radar de caídas con ESPHome) |
 | **Zigbee** | Coordinador SMLIGHT SLZB-06 + sensores y botones Aqara | Línea Sonoff |
 | **Sirenas interior y exterior** | Sirenas cableadas 12 V de alarma convencionales, de cualquier marca disponible en Argentina (p. ej., Hikvision cableada), comandadas por relé desde la placa de relés | — |
-| **Placa de relés** (sirenas y puente opcional) | Placa ESP32 KinCony KC868-A4 (4 relés + 4 entradas optoaisladas, ESPHome) | Placa ESP32 con relés + módulo de entradas optoaisladas |
+| **Placa de relés** (sirenas y puente opcional) | Placa genérica ESP32 con 8 relés + 8 entradas optoacopladas, alimentación 9–24 V, gabinete riel DIN, programada con ESPHome | ESP32 + módulo de relés + módulo de entradas optoacopladas por separado |
 | **TV** | Google TV Streamer en la tele existente | Pantalla propia (tablet) |
 | **Reloj** | Samsung Galaxy Watch5 o posterior + app propia (ver sección 5) | — |
 
@@ -103,7 +103,17 @@ Para la casa que ya tiene alarma y quiere conservarla (ALA-06). Funciona con **c
 
 **Instalación:** la hace el técnico de alarmas de la casa, en las borneras de la central. Se programa qué evento sale por cada PGM y qué zona queda como médica/pánico.
 
-**Equipo:** la misma placa de relés que comanda las sirenas (KinCony KC868-A4, sección 3), con ESPHome.
+**Equipo:** la misma placa de relés que comanda las sirenas (sección 3), con ESPHome.
+
+**Especificación genérica de la placa** (cualquier marca que cumpla):
+- Microcontrolador **ESP32** (no ESP8266 / ESP-01).
+- **3 o más relés:** sirena interior, sirena exterior, disparo de zona médica.
+- **3 o más entradas digitales optoacopladas** de 12 V: lectura de PGM (deben aceptar salidas que conectan a negativo).
+- Alimentación **12 V** (o rango 9–24 V), para tomarla de la fuente con batería.
+- Ethernet con PoE deseable; WiFi alcanza para la prueba.
+- Montaje en gabinete o riel DIN.
+
+⚠ Validar: el mapa de pines (qué GPIO maneja cada relé y cada entrada), si no viene documentado, y que las entradas lean las PGM de la alarma de prueba.
 
 **Sirenas:** cableadas de 12 V, de las que se usan en cualquier alarma, porque son las que se consiguen en todo el país y no dependen de un ecosistema. Las sirenas **inalámbricas** de las marcas de alarma (p. ej., Hikvision AX PRO) usan radio propietaria y solo funcionan con su propia central: no sirven.
 
