@@ -104,13 +104,23 @@ Si la casa tiene alarma, puede aportar:
 2. **Salidas programables (PGM)** de la central conectadas a entradas del hub: se reciben estados (alarma, pánico, sabotaje).
 3. Nuestro hub **dispara una zona** de la alarma con un relé: así una caída confirmada puede salir también por el comunicador y el monitoreo de la alarma.
 
-**Caso de estudio: alarma Tausend (sin monitoreo) de tu casa.** Para entender qué nos puede brindar, necesitamos:
-- Modelo de la central (está en la placa o en el manual).
-- Qué comunicador tiene: línea telefónica, GSM/4G, WiFi o IP.
-- Si tiene salidas PGM.
-- Si se puede configurar para reportar a un receptor propio (Contact ID o SIA, por IP o línea).
-- Qué app usa y qué muestra.
-- Qué sensores tiene instalados.
+### Caso de estudio: Tausend CR600 (con WiFi, sin módulo celular ni monitoreo)
+
+Fuentes: manual CR600 v00.01.27 (2026) y "Comandos por IP" de Tausend.
+
+**Vías de integración, de la más a la menos concreta:**
+
+1. **Salidas PGM → hub (sin protocolo).** 2 salidas en placa (8 con expansor), colector abierto a negativo. Funciones útiles (sección [005]): 01 alarma, 02 armada/desarmada, 05 falla, 21 falla de comunicador, 22 **corte de 220V**. Cualquier zona puede dirigirse a una PGM (atributos 6/7, secciones [023]–[030]). Lectura con un ESP32 + ESPHome.
+2. **Hub → zona de la central (sin protocolo).** Un relé del hub sobre una zona tipo **10 "Médica 24h"** o **12 "Pánico 24h"**: una caída confirmada dispara también la alarma y su notificación. Es el segundo camino de aviso (CONF-06).
+3. **Comandos por IP (documentados por Tausend).** Texto plano por TCP. Relevantes para nosotros:
+   - `STSZ` zonas abiertas en este momento (actividad de los sensores aun desarmada), `STSA` estado (READY, ARM, STAY, AWAY…), `STSF` fallas (AC, BAT, COMU…), `STSM` memorias de alarma.
+   - `FUNM` evento médico, `FUNP` pánico, `PGMn:1` activar salida.
+   - Solo responde a consultas: no envía eventos por su cuenta, hay que consultar periódicamente.
+   - ⚠ **Crítico:** el documento describe el uso en **modo Access Point** (red propia de la central, 192.168.4.1:8002), que es un modo temporal de configuración. Validar si el puerto TCP también responde cuando la central está conectada al WiFi de la casa.
+   - ⚠ Seguridad: `PRG` lee y escribe la configuración (incluido el código maestro) sin pedir clave. Si el puerto queda abierto en la red de la casa, cualquiera en esa red podría usarlo.
+4. **Controles remotos Tausend en modo "Médica exclusivo"** (sección [174], opción 5) como botón SOS adicional.
+
+**Descartadas:** reporte a monitoreo por IP (solo formatos Avatec, Bykom/SoftGuard y Tausend IP, sin especificación pública); app Tausend (pasa por su servidor en la nube); comandos por SMS (requieren módulo celular).
 
 ---
 
@@ -140,7 +150,7 @@ Si la casa tiene alarma, puede aportar:
 
 | Paso | Qué | Fecha propuesta |
 |---|---|---|
-| 1 | Relevamiento de la alarma Tausend | hasta 2026-11-20 |
+| 1 | Relevamiento de la alarma Tausend → **hecho** (sección 4). Pendiente: probar si los comandos por IP responden en la red de la casa | hasta 2026-11-20 |
 | 2 | ~~Análisis de opciones de reloj~~ → **Decidido:** Galaxy Watch5 o posterior | 2026-11-13 |
 | 3 | Compra de 1 unidad de cada equipo de la sección 3 | hasta 2026-11-27 |
 | 4 | Banco de pruebas en una casa real | 2026-11-27 a 2026-12-04 |
