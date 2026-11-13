@@ -57,9 +57,8 @@ ambientes)               OBLIGATORIOS  sirenas       + TV      (opcional)
 | **Cámaras** | Reolink domo PoE de interior | Hikvision domo PoE |
 | **Radar baño/dormitorio** | Aqara FP2 | Seeed MR60FDA2 (radar de caídas con ESPHome) |
 | **Zigbee** | Coordinador SMLIGHT SLZB-06 + sensores y botones Aqara | Línea Sonoff |
-| **Sirena interior** | Sirena Zigbee Heiman HS2WD-E | Sirena Zigbee de otro fabricante |
-| **Sirena exterior** | Sirena exterior 12 V convencional, comandada por la placa del puente (relé) | — |
-| **Puente a alarma existente** (opcional) | Placa ESP32 KinCony KC868-A4 (4 relés + 4 entradas optoaisladas, ESPHome) | Placa ESP32 con relés + módulo de entradas optoaisladas |
+| **Sirenas interior y exterior** | Sirenas cableadas 12 V de alarma convencionales, de cualquier marca disponible en Argentina (p. ej., Hikvision cableada), comandadas por relé desde la placa de relés | — |
+| **Placa de relés** (sirenas y puente opcional) | Placa ESP32 KinCony KC868-A4 (4 relés + 4 entradas optoaisladas, ESPHome) | Placa ESP32 con relés + módulo de entradas optoaisladas |
 | **TV** | Google TV Streamer en la tele existente | Pantalla propia (tablet) |
 | **Reloj** | Samsung Galaxy Watch5 o posterior + app propia (ver sección 5) | — |
 
@@ -104,7 +103,9 @@ Para la casa que ya tiene alarma y quiere conservarla (ALA-06). Funciona con **c
 
 **Instalación:** la hace el técnico de alarmas de la casa, en las borneras de la central. Se programa qué evento sale por cada PGM y qué zona queda como médica/pánico.
 
-**Equipo:** placa ESP32 KinCony KC868-A4 (sección 3), con ESPHome. La misma placa comanda la sirena exterior.
+**Equipo:** la misma placa de relés que comanda las sirenas (KinCony KC868-A4, sección 3), con ESPHome.
+
+**Sirenas:** cableadas de 12 V, de las que se usan en cualquier alarma, porque son las que se consiguen en todo el país y no dependen de un ecosistema. Las sirenas **inalámbricas** de las marcas de alarma (p. ej., Hikvision AX PRO) usan radio propietaria y solo funcionan con su propia central: no sirven.
 
 ### Banco de pruebas: Tausend CR600
 
