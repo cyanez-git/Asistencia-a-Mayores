@@ -58,7 +58,7 @@ ambientes)               OBLIGATORIOS                + TV
 | **Radar baño/dormitorio** | Aqara FP2 | Seeed MR60FDA2 (radar de caídas con ESPHome) |
 | **Zigbee** | Coordinador SMLIGHT SLZB-06 + sensores y botones Aqara | Línea Sonoff |
 | **TV** | Google TV Streamer en la tele existente | Pantalla propia (tablet) |
-| **Reloj** | **En análisis** (ver sección 5) | — |
+| **Reloj** | Samsung Galaxy Watch5 o posterior + app propia (ver sección 5) | — |
 
 ### Por qué cada uno y qué validar
 
@@ -114,14 +114,25 @@ Si la casa tiene alarma, puede aportar:
 
 ---
 
-## 5. Reloj: en análisis
+## 5. Reloj: Samsung Galaxy Watch5 o posterior
 
-Es el dispositivo más exigente: pulso continuo, caídas, temperatura, botón de ayuda, ducha, comodidad, batería y datos directo al hub. Queda **fuera de la primera compra** hasta analizar mejor las opciones.
+**Objetivo de esta etapa:** programar la interfaz y confirmar que recibimos los valores en el hub. Batería, autonomía y años de actualizaciones **no se evalúan ahora**; se revisan cuando el producto esté en marcha.
 
-Opciones vistas hasta ahora:
-- **Samsung Galaxy Watch con app propia:** sensores completos (incluida temperatura de piel), pero batería de 1–2 días. Se planteó usar **dos relojes en rotación**; queda como alternativa a evaluar.
-- **Bangle.js 2:** abierto y con semanas de batería, pero sensores más limitados.
-**Próximo paso:** un análisis más amplio de opciones (relojes, pulseras, colgantes, anillos) contra los requisitos SEG-03, SEG-05, SEG-07, SEG-08 y USO-02.
+**Por qué:** el SDK oficial de sensores de Samsung (Samsung Health Sensor SDK) da pulso continuo con intervalos entre latidos, temperatura de piel continua y acelerómetro continuo. Una app propia en el reloj puede enviar los datos por WiFi directo al hub, sin pasar por la nube de Samsung.
+
+**Modelo:** cualquier Galaxy Watch5 o posterior (incluye Pro y Ultra). La Watch4 no sirve: no tiene temperatura de piel continua. Puede ser usado.
+
+**Qué se necesita para desarrollar:**
+- Reloj físico (el SDK no funciona en el emulador).
+- Celular Android para la configuración inicial del reloj (Galaxy Wearable).
+- Modo desarrollador del reloj y de Health Platform activados.
+- Registro en Samsung Developers y descarga del SDK. Para publicar en la tienda hace falta un acuerdo de socio con Samsung; para la prueba no.
+
+**Qué validar:**
+- ⚠ Recibir en el hub pulso, intervalos entre latidos, temperatura de piel y acelerómetro en forma continua.
+- ⚠ Envío por WiFi directo al hub, sin celular de por medio.
+- ⚠ Detección de caídas propia a partir del acelerómetro.
+- ⚠ Botón o acción de SOS desde el reloj.
 
 ---
 
@@ -130,7 +141,7 @@ Opciones vistas hasta ahora:
 | Paso | Qué | Fecha propuesta |
 |---|---|---|
 | 1 | Relevamiento de la alarma Tausend | hasta 2026-11-20 |
-| 2 | Análisis de opciones de reloj y decisión de qué probar | hasta 2026-11-20 |
+| 2 | ~~Análisis de opciones de reloj~~ → **Decidido:** Galaxy Watch5 o posterior | 2026-11-13 |
 | 3 | Compra de 1 unidad de cada equipo de la sección 3 | hasta 2026-11-27 |
 | 4 | Banco de pruebas en una casa real | 2026-11-27 a 2026-12-04 |
 | 5 | Prueba de 2 semanas | 2026-12-04 a 2026-12-18 |
