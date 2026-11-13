@@ -134,6 +134,22 @@ Los falsos positivos son el mayor riesgo para que el sistema se abandone: si la 
 ### C3. Conectar con la familia
 - **Hace:** la persona le pide "mandale un mensaje a Juan" o "llamá a mi hija", y el asistente lo hace. También le lee o reproduce los mensajes que le llegan.
 
+### C3b. Conversar sobre lo que pasó
+- **Situación:** la persona tuvo un día con hechos para comentar: habló con su hija, vino una visita, fue al médico, pasó algo en el barrio.
+- **Hace:** usa eso como inicio de conversación y reflexiona con ella ("¿Cómo te quedaste después de hablar con Laura? Parecía preocupada por el trabajo"). Retoma temas pendientes de días anteriores.
+- **Objetivo:** que la conversación sea personal y continua, como con alguien que la conoce y estuvo ahí.
+
+### C3c. Comentar lo que está viendo o escuchando
+- **Situación:** está mirando el noticiero, un programa de chimentos, una película, un partido, o escuchando la radio.
+- **Percibe:** qué contenido se está reproduciendo y de qué se habla.
+- **Hace:** comenta el tema con naturalidad, en el momento oportuno ("¿Viste lo que dijeron del aumento de las jubilaciones?", "Esa actriz es la que te gustaba en la novela de los 80"). No interrumpe en momentos inoportunos y respeta si la persona quiere ver tranquila.
+- **Además:** lo que vio o escuchó sirve después como tema de conversación.
+
+### C3d. Pedir música o contenido
+- **Situación:** pide "poneme un tango de Gardel", "quiero escuchar la radio", "mostrame en YouTube el video de Sandro", "poné la misa".
+- **Hace:** reproduce la música o la radio en el parlante, y el video en la tele o en una pantalla. Controla volumen, pausa, siguiente, por voz.
+- **Además:** puede proponer música según el momento y el ánimo, y aprende sus gustos.
+
 ### C4. Cambio brusco de ánimo
 - **Percibe:** tono de voz, temas, frases ("no tengo ganas de nada", "para qué seguir"), menos interés en conversar, comparado con su forma habitual.
 - **Hace:** la acompaña con empatía, sin interrogarla.

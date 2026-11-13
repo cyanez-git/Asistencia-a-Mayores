@@ -26,6 +26,10 @@ Los requisitos dicen **qué** tiene que lograr el sistema, no con qué hardware 
 | VOZ-08 | Recordatorios de medicación, turnos, cumpleaños y tareas, integrados a la conversación, con confirmación de si se cumplieron. | E | C2 |
 | VOZ-09 | Mandar mensajes y hacer llamadas a la familia por pedido de voz; leer o reproducir los mensajes que llegan. | E | C3 |
 | VOZ-10 | La familia puede cargar recordatorios, mensajes y temas para que el asistente los integre ("decile que el domingo vamos a comer"). | E | C2, C3 |
+| VOZ-11 | Conversar y reflexionar sobre hechos ocurridos en la vida de la persona (una charla con un familiar, una visita, un turno médico) y usarlos como inicio de conversación. | E | C3b |
+| VOZ-12 | Reconocer qué está viendo o escuchando la persona (TV, radio: noticiero, chimentos, películas, deportes, música) y comentarlo en el momento oportuno, sin interrumpir de forma inoportuna. | E | C3c |
+| VOZ-13 | Reproducir música y radio por pedido de voz, con control por voz (volumen, pausa, siguiente), y aprender sus gustos. | E | C3d |
+| VOZ-14 | Mostrar videos o contenido (p. ej., YouTube) en la tele o en una pantalla por pedido de voz. | E | C3d |
 
 ### 1.2 Interpretación en segundo plano (INT)
 
@@ -147,6 +151,8 @@ Esto es lo que tiene que **percibir** el sistema. Es la entrada para el paso de 
 | **Ojos** (cámara) | Ambientes comunes y entrada | Caídas, postura, reconocimiento de personas, visitas, ingresos | SEG-01, SEG-10, INT-06 |
 | **Sensor sin imagen** | Baño, dormitorio | Presencia, caída, inmovilidad, tiempo en el ambiente | SEG-01, SEG-06 |
 | **Wearable** | En la persona | Pulso continuo, impacto/caída, temperatura, botón de ayuda | SEG-03, SEG-05, SEG-07, SEG-08 |
+| **Contexto de medios** | Donde haya TV o radio | Saber qué contenido se está reproduciendo (por audio o integración con la TV) | VOZ-12 |
+| **Salida de audio de calidad y pantalla** | Ambientes donde escucha música o mira tele | Música, radio, videos; mostrar contenido en la TV existente o en una pantalla propia | VOZ-13, VOZ-14 |
 | **Sensores del hogar** | Cocina, puertas, baño | Hornalla, agua, puerta abierta, temperatura ambiente | INT-09 |
 | **Hub local** con respaldo de energía y canal celular | Un lugar fijo | Procesamiento local, camino de emergencia, avisos | CONF-01..05 |
 
@@ -159,3 +165,4 @@ Esto es lo que tiene que **percibir** el sistema. Es la entrada para el paso de 
 3. **Qué corre en la casa y qué en la nube:** la conversación probablemente use IA en la nube; la detección y la emergencia, en la casa (CONF-01).
 4. **Acceso de emergencia a la casa:** cómo entra quien acude si la persona no puede abrir.
 5. **Tiempo de aprendizaje** de la línea base antes de activar la detección de cambios.
+6. **TV y pantalla:** controlar la tele existente de la persona (si es smart o con un dispositivo conectado) o sumar una pantalla propia. Define cómo se cumplen VOZ-12 y VOZ-14.
