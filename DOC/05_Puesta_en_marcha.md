@@ -62,7 +62,7 @@ adb shell am start -n ar.asistencia.reloj/.presentation.MainActivity --es host <
 - **Acelerómetro:** llega a unas 60 muestras por segundo (no 25), en unidades crudas; reposo ≈ 4100 (≈ 1 g ≈ 4096). A calibrar.
 
 **Pendiente del reloj:**
-- Confirmar valores de pulso y temperatura con el reloj bien puesto.
+- ~~Confirmar valores de pulso y temperatura con el reloj bien puesto.~~ **Confirmado:** los valores en Home Assistant coinciden con los del reloj.
 - Detección de caídas en el reloj a partir del acelerómetro.
 - Botón SOS desde el reloj.
 - Inicio automático tras reiniciar el reloj (requiere una forma permitida por Android 16).
