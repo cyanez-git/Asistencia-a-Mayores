@@ -38,9 +38,38 @@ sudo virt-install --name haos --os-variant generic --memory 4096 --vcpus 2 --imp
 - La IP la asigna el router por DHCP. ⚠ Conviene reservarla en el router para que no cambie.
 - Ver estado: `sudo virsh list`.
 
-## 2. Pendientes
+## 2. Reloj: datos de sensores a Home Assistant ✅ (2026-11-17)
+
+**Resultado:** el reloj aparece en Home Assistant como dispositivo **"Reloj (reloj1)"** con sus sensores (pulso, intervalo entre latidos, temperatura de piel y ambiente, aceleración). Los datos viajan por WiFi directo al broker MQTT de la casa, **sin pasar por la nube de Samsung**. Objetivo de la etapa cumplido.
+
+**Equipo:** Galaxy Watch5 SM-R900 (40 mm), One UI Watch 8 / Wear OS 6 (API 36). Servicio de sensores de Samsung ("Plataforma de Salud", paquete `com.samsung.android.service.health`) versión 1.7.00.05. SDK: Samsung Health Sensor SDK 1.4.1.
+
+**App:** [`reloj/app`](../reloj/app). Servicio en primer plano que lee `HEART_RATE_CONTINUOUS`, `SKIN_TEMPERATURE_CONTINUOUS` y `ACCELEROMETER_CONTINUOUS` y publica un resumen cada 5 s por MQTT, con "MQTT discovery" para que Home Assistant cree los sensores solo. El SDK (`.aar`) no se sube al repositorio: se copia desde `reloj/sdk`.
+
+**Home Assistant:** app "Mosquitto broker" instalada; usuario propio para el reloj.
+
+**Configuración del reloj** (la carga el usuario desde la notebook, la clave no pasa por el repositorio):
+
+```
+adb shell am start -n ar.asistencia.reloj/.presentation.MainActivity --es host <IP de HA> --es usuario <usuario> --es clave <clave>
+```
+
+**Aprendizajes (no estaban claros en la documentación):**
+- **Modo desarrollador de Samsung** (sin él: `SDK_POLICY_ERROR`): en el reloj, Ajustes → Aplicaciones → **Plataforma de Salud** (así se llama en español en esta versión, no "Health Sensor Service"). Tocar repetidamente hasta que aparezca el mensaje "Los datos de los sensores se compartirán con las aplicaciones conectadas" y la etiqueta **[Dev mode]**. No aparece ningún botón ni licencia. Se verifica en el log del servicio: `isDeveloperMode true/false`.
+- **Permisos en Wear OS 6:** `BODY_SENSORS` ya no aplica. Hacen falta `android.permission.health.READ_HEART_RATE`, `android.permission.health.READ_SKIN_TEMPERATURE` (sin este: `PERMISSION_ERROR` en temperatura) y `com.samsung.android.hardware.sensormanager.permission.READ_ADDITIONAL_HEALTH_DATA`.
+- **Servicio de salud en primer plano:** Android solo permite iniciarlo con la app abierta y visible. Se inicia con el botón "Iniciar"; no puede arrancar solo desde segundo plano.
+- **Depuración por WiFi:** el reloj la apaga cuando suspende el WiFi; al reactivarla cambia el puerto. El vínculo con la notebook se mantiene. Conviene trabajar con el reloj cargando y la pantalla encendida.
+- **Acelerómetro:** llega a unas 60 muestras por segundo (no 25), en unidades crudas; reposo ≈ 4100 (≈ 1 g ≈ 4096). A calibrar.
+
+**Pendiente del reloj:**
+- Confirmar valores de pulso y temperatura con el reloj bien puesto.
+- Detección de caídas en el reloj a partir del acelerómetro.
+- Botón SOS desde el reloj.
+- Inicio automático tras reiniciar el reloj (requiere una forma permitida por Android 16).
+
+## 3. Pendientes generales
 
 1. Pasar la mini PC al mismo router que las cámaras y la alarma (hoy están en redes distintas).
 2. Reservar la IP de Home Assistant en el router.
 3. Integrar las cámaras Seisa e Imou.
-4. Cuando lleguen: reloj (app propia + recepción de datos), placa de relés (ESPHome), coordinador Zigbee y sensores.
+4. Cuando lleguen: placa de relés (ESPHome), coordinador Zigbee y sensores.

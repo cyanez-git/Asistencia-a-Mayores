@@ -23,6 +23,8 @@
         android:maxSdkVersion="35" />
     <!-- Sensores de salud: Wear OS 6 en adelante (API 36+) -->
     <uses-permission android:name="android.permission.health.READ_HEART_RATE" />
+    <uses-permission android:name="android.permission.health.READ_SKIN_TEMPERATURE" />
+    <uses-permission android:name="android.permission.health.READ_OXYGEN_SATURATION" />
     <uses-permission android:name="android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND" />
     <!-- Datos adicionales de Samsung (temperatura de piel, acelerómetro) -->
     <uses-permission android:name="com.samsung.android.hardware.sensormanager.permission.READ_ADDITIONAL_HEALTH_DATA" />

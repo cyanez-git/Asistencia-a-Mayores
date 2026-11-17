@@ -65,6 +65,8 @@ class MainActivity : ComponentActivity() {
             if (Build.VERSION.SDK_INT >= 33) add(Manifest.permission.POST_NOTIFICATIONS)
             if (Build.VERSION.SDK_INT >= 36) {
                 add("android.permission.health.READ_HEART_RATE")
+                add("android.permission.health.READ_SKIN_TEMPERATURE")
+                add("android.permission.health.READ_OXYGEN_SATURATION")
             } else {
                 add(Manifest.permission.BODY_SENSORS)
             }

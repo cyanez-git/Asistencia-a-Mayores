@@ -68,13 +68,24 @@ class SensorService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        iniciarPrimerPlano()
+        try {
+            iniciarPrimerPlano()
+        } catch (e: Exception) {
+            // Android solo permite iniciar un servicio de salud con la app en primer plano.
+            Log.e(TAG, "No se pudo pasar a primer plano", e)
+            Estado.servicio = "Detenido"
+            Estado.error = "Abrí la app y tocá Iniciar con la pantalla encendida"
+            stopSelf()
+            return START_NOT_STICKY
+        }
+        if (salud != null) return START_NOT_STICKY // ya estaba en marcha
         tomarLocks()
         if (config.completa) publicador.conectar() else Estado.mqtt = "Falta configurar el host"
         conectarSalud()
         handler.postDelayed(envioPeriodico, INTERVALO_MS)
         Estado.servicio = "En marcha"
-        return START_STICKY
+        // No se reinicia solo: Android no permitiría pasarlo a primer plano desde segundo plano.
+        return START_NOT_STICKY
     }
 
     override fun onDestroy() {
@@ -114,6 +125,9 @@ class SensorService : Service() {
 
     private fun iniciarTrackers() {
         val servicio = salud ?: return
+        // Si el servicio de Samsung se reconecta, se vuelve a llamar: evitar listeners duplicados.
+        trackers.forEach { runCatching { it.unsetEventListener() } }
+        trackers.clear()
         val soportados = servicio.trackingCapability.supportHealthTrackerTypes
         Log.i(TAG, "Trackers soportados: $soportados")
         val deseados = listOf(
